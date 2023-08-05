@@ -2,65 +2,57 @@ let currentCardsArr = [];
 
 let searchBtn = document.querySelector(".container__add-city-btn button");
 searchBtn.addEventListener("click", () => {
-    let apiKey = "ab659fdf4eb03b149cbee37e7506db83"
-    let inputCityName = document.querySelector(".container__search-input input");
-    getWeatherDetails(apiKey, inputCityName.value.toLocaleLowerCase());
-    inputCityName.value = "";
-})
-
+  let apiKey = "ab659fdf4eb03b149cbee37e7506db83";
+  let inputCityName = document.querySelector(".container__search-input input");
+  getWeatherDetails(apiKey, inputCityName.value.toLocaleLowerCase());
+  inputCityName.value = "";
+});
 
 let error = document.querySelector(".error-message");
 async function getWeatherDetails(apiKey, cityName) {
-    try{
-    let Url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`
+  try {
+    let Url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`;
     let response = await fetch(Url);
     let data = await response.json();
     createCard(data);
     error.style.display = "none";
-    }catch (data) {
-        error.style.display = "block";
-    }
+  } catch (data) {
+    error.style.display = "block";
+  }
 }
 
 let cardsContainer = document.querySelector(".container__weather-cards");
-let weatherImg = document.querySelector(".weather-img img")
+let weatherImg = document.querySelector(".weather-img img");
 function createCard(cityData) {
-    let maxTemp = Math.floor(cityData.main.temp_max);
-    let minTemp = Math.floor(cityData.main.temp_min);
-    let cityName = cityData.name;
-    let temperature = Math.floor(cityData.main.temp);
-    let weatherType = cityData.weather[0].main;
-    let weatherImgString;
-    if (cityData.weather[0].main == "Clouds") 
-    {
-        weatherImgString = "Cloudy.png";
-        
-    } 
-    if(cityData.weather[0].main == "Clear") 
-    {
-        weatherImgString = "Cloudy.png";
-    } 
-    if(cityData.weather[0].main == "Haze") 
-    {
-        weatherImgString = "windy.png";
-    } 
-    if(cityData.weather[0].main == "Rain") 
-    {
-        weatherImgString = "Rainy.png";
-    } 
-    if(cityData.weather[0].main == "Drizzle") 
-    {
-        weatherImgString = "tornado.png";
-    } 
-    if (cityData.weather[0].main == "Mist") 
-    {
-        weatherImgString = "windy.png";
-    }
+  let maxTemp = Math.floor(cityData.main.temp_max);
+  let minTemp = Math.floor(cityData.main.temp_min);
+  let cityName = cityData.name;
+  let temperature = Math.floor(cityData.main.temp);
+  let weatherType = cityData.weather[0].main;
+  let weatherImgString;
+  if (cityData.weather[0].main == "Clouds") {
+    weatherImgString = "Cloudy.png";
+  }
+  if (cityData.weather[0].main == "Clear") {
+    weatherImgString = "Cloudy.png";
+  }
+  if (cityData.weather[0].main == "Haze") {
+    weatherImgString = "windy.png";
+  }
+  if (cityData.weather[0].main == "Rain") {
+    weatherImgString = "Rainy.png";
+  }
+  if (cityData.weather[0].main == "Drizzle") {
+    weatherImgString = "tornado.png";
+  }
+  if (cityData.weather[0].main == "Mist") {
+    weatherImgString = "windy.png";
+  }
 
-    let CardDiv = document.createElement("div");
-    CardDiv.classList.add("single-card");
-    CardDiv.classList.add("animate__animated", "animate__fadeIn");
-    let cardHtml = `<div class="background-svg">
+  let CardDiv = document.createElement("div");
+  CardDiv.classList.add("single-card");
+  CardDiv.classList.add("animate__animated", "animate__fadeIn");
+  let cardHtml = `<div class="background-svg">
                         <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="343"
@@ -102,16 +94,16 @@ function createCard(cityData) {
                         <div class="city-name">${cityName}</div>
                         </div>
                         <div class="card-bottom-right">${weatherType}</div>
-                    </div>`
-             CardDiv.innerHTML = cardHtml;
-             currentCardsArr.push({temperature,CardDiv}); 
-             appendUi(currentCardsArr);  
+                    </div>`;
+  CardDiv.innerHTML = cardHtml;
+  currentCardsArr.push({ temperature, CardDiv });
+  appendUi(currentCardsArr);
 }
 
 function appendUi(currentCardsArr) {
-    cardsContainer.innerHTML = "";
-    currentCardsArr.sort((a,b) => a.temperature - b.temperature);
-    currentCardsArr.forEach((card) => {
-        cardsContainer.appendChild(card.CardDiv);
-    })
+  cardsContainer.innerHTML = "";
+  currentCardsArr.sort((a, b) => a.temperature - b.temperature);
+  currentCardsArr.forEach((card) => {
+    cardsContainer.appendChild(card.CardDiv);
+  });
 }
